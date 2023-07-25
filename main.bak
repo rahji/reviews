@@ -1,0 +1,51 @@
+package main
+
+// read the yaml file
+// make a map of
+
+import (
+	"encoding/csv"
+	"fmt"
+	"log"
+	"os"
+)
+
+func readCsvFile(filePath string) [][]string {
+	f, err := os.Open(filePath)
+	if err != nil {
+		log.Fatal("Unable to read input file "+filePath, err)
+	}
+	defer f.Close()
+
+	csvReader := csv.NewReader(f)
+	records, err := csvReader.ReadAll()
+	if err != nil {
+		log.Fatal("Unable to parse file as CSV for "+filePath, err)
+	}
+
+	return records
+}
+
+func main() {
+	//records := readCsvFile("file.csv")
+	// recordsMap := make(map[string]string)
+	// for _, record := range records {
+	// 	recordsMap[record[0]] = record[1]
+	// }
+
+	fields := readCsvFile("fields.csv")
+
+	//convert fields to map
+	fieldsMap := make(map[string]string)
+	for _, field := range fields {
+		fieldsMap[field[0]] = field[1]
+	}
+
+	fmt.Println(fieldsMap["EndDate"])
+
+	// loop through records slice and print each record
+	//	for _, record := range records {
+	//		fmt.Println(record)
+	//	}
+	//	fmt.Println(records[0][0])
+}
