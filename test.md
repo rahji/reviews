@@ -1,4 +1,4 @@
 # test
 
-* {{.q_firstyearprepared_1}}
-* {{.a_firstyearprepared_1}}
+* {{.questions.firstyearprepared_1}}
+* {{.answers.firstyearprepared_1}}

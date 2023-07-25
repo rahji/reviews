@@ -11,10 +11,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type Evaluation struct {
-	Questions map[string]string
-}
-
 func init() {
 	rootCmd.AddCommand(convertCmd)
 
@@ -52,12 +48,15 @@ func converter(cmd *cobra.Command, args []string) {
 	// 	panic(err)
 	// }
 
-	e := &Evaluation{}
-	e.Questions = make(map[string]string)
-	e.Questions["q_firstyearprepared_1"] = "Was they prepared?"
-	e.Questions["q_firstyearprepared_2"] = "How prepared was they?"
-	e.Questions["a_firstyearprepared_1"] = "They was prepared."
-	e.Questions["a_firstyearprepared_2"] = "They was not prepared."
+	data := map[string]map[string]string{}
+
+	data["questions"] = make(map[string]string)
+	data["questions"]["firstyearprepared_1"] = "Was they prepared?"
+	data["questions"]["firstyearprepared_2"] = "How prepared was they?"
+
+	data["answers"] = make(map[string]string)
+	data["answers"]["firstyearprepared_1"] = "They was prepared."
+	data["answers"]["firstyearprepared_2"] = "They was not prepared."
 
 	template, err := template.ParseFiles("test.md")
 	// Capture any error
@@ -65,6 +64,6 @@ func converter(cmd *cobra.Command, args []string) {
 		log.Fatalln(err)
 	}
 	// Print out the template to std
-	log.Println(e.Questions)
-	template.Execute(os.Stdout, e.Questions)
+	log.Println(data)
+	template.Execute(os.Stdout, data)
 }
