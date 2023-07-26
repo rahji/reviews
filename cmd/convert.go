@@ -35,7 +35,8 @@ var convertCmd = &cobra.Command{
 	Use:   "convert",
 	Short: "Converts csv to markdown using the template file.",
 	Long: `Converts csv to markdown using the template file. 
-(Assumes the csv contains reviews for a single year/semester/review combination (eg: 2023 Fall Second)
+Creates as many files as there are lines in the csv file: one file per student/faculty pair.
+(Assumes the csv contains reviews for a single year/semester/review combination (eg: 2023 Fall Second))
 `,
 	Run: converter,
 }
