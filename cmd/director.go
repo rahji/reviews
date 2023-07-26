@@ -16,31 +16,21 @@ import (
 )
 
 func init() {
-	rootCmd.AddCommand(convertCmd)
-
+	rootCmd.AddCommand(directorCmd)
 	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// convertCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// convertCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-
 }
 
-// convertCmd represents the convert command
-var convertCmd = &cobra.Command{
-	Use:   "convert",
-	Short: "Converts csv to markdown using the template file.",
-	Long: `Converts csv to markdown using the template file. 
+// directorCmd represents the director command
+var directorCmd = &cobra.Command{
+	Use:   "director",
+	Short: "Creates a single markdown file containing all private comments in the csv file.",
+	Long: `Creates a single markdown file containing all private comments in the csv file. 
 (Assumes the csv contains reviews for a single year/semester/review combination (eg: 2023 Fall Second)
 `,
-	Run: converter,
+	Run: director,
 }
 
-func converter(cmd *cobra.Command, args []string) {
+func director(cmd *cobra.Command, args []string) {
 
 	csv := readCsvFile(csvFile)
 	// line 0 is the column names

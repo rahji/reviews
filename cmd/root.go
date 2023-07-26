@@ -1,5 +1,6 @@
 /*
-Copyright © 2023 NAME HERE <EMAIL ADDRESS>
+2023 Rob Duarte MIT License
+github.com/rahji
 */
 
 package cmd
@@ -13,6 +14,17 @@ import (
 )
 
 var version = "0.0.1"
+var templateFile string
+var csvFile string
+var outputDir string
+
+// make a type for each csv field, which is a struct with a string for the column name
+// and a string for the column text (eg: the full text of the question)
+
+type Field struct {
+	ColumnName     string
+	ColumnQuestion string
+}
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -60,5 +72,8 @@ func init() {
 	// will be global for your application.
 
 	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.reviews.yaml)")
+	rootCmd.PersistentFlags().StringVar(&templateFile, "template", "template.md", "template file (default: template.md)")
+	rootCmd.PersistentFlags().StringVar(&csvFile, "input", "input.csv", "input csv file (default: input.csv)")
+	rootCmd.PersistentFlags().StringVar(&outputDir, "outputdir", ".", "output folder (default: current directory)")
 
 }
