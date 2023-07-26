@@ -1,32 +1,37 @@
-# {{.response.Year}} {{.response.Review}}Year {{.response.Semester}} Review Evaluation
+---
+header-includes: \usepackage{longtable}\setlength{\LTleft}{0em}
+---
 
-* Student Name: {{.response.studentname}}
-* Faculty Name: {{.response.facultyname}}
+# {{.answers.Year}} {{.answers.Review}}-Year {{.answers.Semester}} Review Evaluation{{if eq .answers.rereview "Yes"}} (RE-REVIEW){{end}}
 
-* Submission Date: {{.response.RecordedDate}}
-* ReReview: {{.response.rereview}}
+Student Name: {{.answers.studentname}}  
+Faculty Name: {{.answers.facultyname}}  
 
-## FirstYear Review Goals
+## {{.answers.Review}}-Year Review Goals
 
-* {.question.firstyeargoals_1}: {.response.firstyeargoals_1}
-* {.question.firstyeargoals_1}: {.response.firstyeargoals_1}
+| Goal | Rating |
+| ---- | ---- |
+| {{.questions.firstyeargoals_1}} | **{{.answers.firstyeargoals_1}}** |
+| {{.questions.firstyeargoals_2}} | **{{.answers.firstyeargoals_2}}** |
 
-## Student Responsibilities
+## {{.answers.Review}}-Year Student Responsibilities
 
-* {.question.firstyearprepared_1}: {.response.firstyearprepared_1}
-* {.question.firstyearprepared_2}: {.response.firstyearprepared_2}
-* {.question.firstyearprepared_3}: {.response.firstyearprepared_3}
-* {.question.firstyearprepared_4}: {.response.firstyearprepared_4}
-* {.question.firstyearprepared_4}: {.response.firstyearprepared_5}
+| Goal | Rating |
+| --------------------------------------------------------------------- | ---- |
+| {{.questions.firstyearprepared_1}} | **{{.answers.firstyearprepared_1}}** |
+| {{.questions.firstyearprepared_2}} | **{{.answers.firstyearprepared_2}}** |
+| {{.questions.firstyearprepared_3}} | **{{.answers.firstyearprepared_3}}** |
+| {{.questions.firstyearprepared_4}} | **{{.answers.firstyearprepared_4}}** |
+| {{.questions.firstyearprepared_5}} | **{{.answers.firstyearprepared_5}}** |
 
 ## Overall Rating
 
-{.question.overallevaluation}
+> **{{.answers.overallevaluation}}**
 
-{.response.overallevaluation}
+*Please see the “Formal Review Evaluation” section of the MFA Handbook to understand what this rating means.*
 
 ## Comments
 
-{.question.studentcomments}
+*{{.questions.studentcomments}}*
 
-{.response.studentcomments}
+> {{.answers.studentcomments}}
