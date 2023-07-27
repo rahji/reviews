@@ -50,7 +50,7 @@ To get PDFs of all of the comments left by faculty (one PDF per student), run th
 * The folder where you want to save the PDFs
 * A simple prefix for the markdown and PDF filenames (eg: "comments", "director", etc)
 
-Use the arrow keys to navigate while answering questions in these scripts. To stop where you are (after you've already said "Yes" to continue), press `CTRL+C` a couple times.
+Use the arrow keys to navigate while answering questions in these scripts. To abandon the process at any time, press `CTRL+C` a couple times.
 
 BTW, both scripts call `review` (to create Markdown files from the CSV) and `pandoc` (to create PDFs from the Markdown files). If you're interested in seeing how `review` works (for use outside of the scripts above), type the command below in your terminal application. You can also pass a `-v` flag to either of the above scripts, to see the underlying commands being run.
 
