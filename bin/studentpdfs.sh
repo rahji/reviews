@@ -22,7 +22,7 @@ if [ "$CHOICE" != "YES" ]; then
     exit 1
 fi
 
-gum spin --title "Converting to markdown" -- ./reviews convert --template=$TEMPLATE --input=$CSV --outputdir=$MDOUTPUT
+gum spin --title "Converting to markdown" -- reviews convert --template=$TEMPLATE --input=$CSV --outputdir=$MDOUTPUT
 
 echo "Ready to create PDF files in $PDFOUTPUT? (this is the slow part)"
 CHOICE=$(gum choose "YES" "NO")

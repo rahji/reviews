@@ -5,23 +5,35 @@ github.com/rahji
 package cmd
 
 import (
+	"fmt"
 	"log"
 	"os"
+	"regexp"
 	"text/template"
 
+	"github.com/flytam/filenamify"
 	"github.com/spf13/cobra"
 )
 
 // each student has a slice of FacultyReview structs
 type FacultyReview struct {
+	Semester       string
+	Year           string
+	Review         string
+	Rereview       string
+	StudentName    string
 	FacultyName    string
 	PrivateComment string
 	PublicComment  string
 	OverallRating  string
 }
 
+var outputPrefix string
+
 func init() {
 	rootCmd.AddCommand(directorCmd)
+	directorCmd.PersistentFlags().StringVar(&outputPrefix, "outputprefix", "", "The prefix for the markdown output filename (required)")
+	directorCmd.MarkPersistentFlagRequired("outputprefix")
 }
 
 // directorCmd represents the director command
@@ -49,23 +61,24 @@ func director(cmd *cobra.Command, args []string) {
 		cols[csv[0][i]] = i
 	}
 
-	/*
-		loop through the whole file while creating a map of maps
-		student --> faculty member -> private comment, public comment, overall rating
-		iterate over that map
-		for each student, feed its faculty member map to the template (which will have looping logic in it)
-	*/
-
 	// loop through rest of the csv lines
 	// to set up a map of slices (each of which contains a map with the keys shown below):
 	// student1 -> [0] -> FacultyReview struct (facultyname, private comment, public comment, overall rating)
 	//             [1] -> FacultyReview struct (facultyname, private comment, public comment, overall rating)
 	//             etc.
+	// * actually, we'll include all review info in the FacultyReview struct, instead of overall metadata about this csv
+	// so this command can be run on a giant csv file containing all reviews for multiple years/semesters/reviews!
+
 	studentMap := make(map[string][]FacultyReview)
 
 	for i := 3; i < len(csv); i++ {
 		studentMap[csv[i][cols["studentname"]]] = append(studentMap[csv[i][cols["studentname"]]],
 			FacultyReview{
+				Semester:       csv[i][cols["Semester"]],
+				Year:           csv[i][cols["Year"]],
+				Rereview:       csv[i][cols["rereview"]],
+				Review:         csv[i][cols["Review"]],
+				StudentName:    csv[i][cols["studentname"]],
 				FacultyName:    csv[i][cols["facultyname"]],
 				PrivateComment: csv[i][cols["privatecomments"]],
 				PublicComment:  csv[i][cols["studentcomments"]],
@@ -73,87 +86,43 @@ func director(cmd *cobra.Command, args []string) {
 			})
 	}
 
-	// data := struct {
-	//     Year string
-	//     Semester string
-	// 	Review string
-	// 	Rereview string
-	//     Rows   []FacultyReview
-	// }{
-	//     fields[],
-	//     table,
-	//     studentMap["jerry"],
-	// }
+	// loop through the studentMap and create a markdown file for each student
+	for student, reviews := range studentMap {
 
-	// data := map[string]map[string]string{}
-	// data["questions"] = make(map[string]string)
-	// data["answers"] = make(map[string]string)
+		// log.Println("student...", student)
+		// log.Println("reviews...", reviews)
 
-	// for i := 3; i < len(csv); i++ {
+		// create a filename for this student
+		nameswapreg := regexp.MustCompile(`^(\p{L}).*?(\p{L}+)$`)
+		studentname := nameswapreg.ReplaceAllString(student, "${2}${1}") // "Rob Duarte" => "DuarteR"
 
-	// 	// for each student, create a map of maps
-	// 	// faculty1 -> private comment, public comment, overall rating
-	// 	// faculty2 -> private comment, public comment, overall rating
-	// 	// etc.
-	// 	studentMap[csv[i][0]] = make(map[string]map[string]string)
+		fn_str := fmt.Sprintf("%s_%s.md", outputPrefix, studentname)
+		fn, err := filenamify.Filenamify(fn_str, filenamify.Options{})
+		if err != nil {
+			panic(err)
+		}
 
-	// 	for j := 0; j < len(csv[0]); j++ {
-	// 		data["questions"][fields[j].ColumnName] = fields[j].ColumnQuestion
-	// 		data["answers"][fields[j].ColumnName] = csv[i][j]
-	// 	}
+		// create the output file
+		fo, err := os.Create(outputDir + "/" + fn)
+		if err != nil {
+			panic(err)
+		}
+		// close fo on exit and check for its returned error
+		defer func() {
+			if err := fo.Close(); err != nil {
+				panic(err)
+			}
+		}()
 
-	// // make a filename from the review info
-	// // eg: 2023Spring_First_REREVIEW_studentname_facultyname.md
-	// // or: 2024Fall_Second_studentname_facultyname.md
-	// rereview := ""
-	// if data["answers"]["rereview"] == "Yes" {
-	// 	rereview = "_REREVIEW"
-	// }
-	// nameswapreg := regexp.MustCompile(`^(\p{L}).*?(\p{L}+)$`)
-	// studentname := nameswapreg.ReplaceAllString(data["answers"]["studentname"], "${2}${1}") // "Rob Duarte" => "DuarteR"
-	// facultyname := nameswapreg.ReplaceAllString(data["answers"]["facultyname"], "${2}${1}") // "Rob Duarte" => "DuarteR"
+		// loop through the reviews for this student
+		// and create a markdown file for each review
+		template, err := template.ParseFiles(templateFile)
+		// Capture any error
+		if err != nil {
+			log.Fatalln(err)
+		}
 
-	// fn_str := fmt.Sprintf("%s%s_%s%s_%s_%s.md",
-	// 	data["answers"]["Year"],
-	// 	data["answers"]["Semester"],
-	// 	data["answers"]["Review"],
-	// 	rereview,
-	// 	studentname,
-	// 	facultyname)
-	// fn, err := filenamify.Filenamify(fn_str, filenamify.Options{})
-	// if err != nil {
-	// 	panic(err)
-	// }
+		template.Execute(fo, reviews)
 
-	// // create the output file
-	// fo, err := os.Create(outputDir + "/" + fn)
-	// if err != nil {
-	// 	panic(err)
-	// }
-	// // close fo on exit and check for its returned error
-	// defer func() {
-	// 	if err := fo.Close(); err != nil {
-	// 		panic(err)
-	// 	}
-	// }()
-
-	// // Parse the template file
-	// template, err := template.ParseFiles(templateFile)
-	// // Capture any error
-	// if err != nil {
-	// 	log.Fatalln(err)
-	// }
-	// // Print out the template to std
-	// template.Execute(fo, data)
-
-	//spew.Dump(studentMap)
-
-	template, err := template.ParseFiles("private.md")
-	// Capture any error
-	if err != nil {
-		log.Fatalln(err)
 	}
-
-	template.Execute(os.Stdout, studentMap["Rich Bott"])
-
 }
