@@ -14,10 +14,6 @@ import (
 
 // each student has a slice of FacultyReview structs
 type FacultyReview struct {
-	Year           string
-	Semester       string
-	Review         string
-	Rereview       string
 	FacultyName    string
 	PrivateComment string
 	PublicComment  string
@@ -47,11 +43,10 @@ func director(cmd *cobra.Command, args []string) {
 	// line 2 is not useful for us
 	// next lines are the survey results, one per line
 
-	// make a slice of Field structs using the first two rows of the csv file
-	// even though we don't necessarily need the "ColumnQuestion" for the director command
-	fields := []Field{}
+	// make a map of colnames->colnum using the first two rows of the csv file
+	cols := make(map[string]int)
 	for i := 0; i < len(csv[0]); i++ {
-		fields = append(fields, Field{ColumnName: csv[0][i], ColumnQuestion: csv[1][i]})
+		cols[csv[0][i]] = i
 	}
 
 	/*
@@ -61,20 +56,34 @@ func director(cmd *cobra.Command, args []string) {
 		for each student, feed its faculty member map to the template (which will have looping logic in it)
 	*/
 
-	// loop through rest of the csv lines,
-	// set up a map of slices (each of which contains a map with the keys shown below):
-	// student1 -> 0 -> facultyname, private comment, public comment, overall rating
-	//             1 -> facultyname, private comment, public comment, overall rating
+	// loop through rest of the csv lines
+	// to set up a map of slices (each of which contains a map with the keys shown below):
+	// student1 -> [0] -> FacultyReview struct (facultyname, private comment, public comment, overall rating)
+	//             [1] -> FacultyReview struct (facultyname, private comment, public comment, overall rating)
 	//             etc.
-
-	// create a map of slices of FacultyReview structs
 	studentMap := make(map[string][]FacultyReview)
-	// make a FacultyReview struct and add it to the appropriate slice
-	studentMap["jerry"] = append(studentMap["jerry"], FacultyReview{Year: "2023", Semester: "Fall", Review: "First", Rereview: "Yes", FacultyName: "Rob Duarte", PrivateComment: "Rob's private comment", PublicComment: "Rob's public comment", OverallRating: "Satisfactory"})
-	studentMap["jerry"] = append(studentMap["jerry"], FacultyReview{Year: "2023", Semester: "Fall", Review: "First", Rereview: "No", FacultyName: "Judy Rushin", PrivateComment: "Judy's private comment", PublicComment: "Judy's public comment", OverallRating: "Provisional"})
-	studentMap["jerry"] = append(studentMap["jerry"], FacultyReview{Year: "2023", Semester: "Fall", Review: "First", Rereview: "Yes", FacultyName: "Denise Bookwalter", PrivateComment: "Denise's private comment", PublicComment: "Denise's public comment", OverallRating: "Unsatisfactory"})
-	studentMap["sally"] = append(studentMap["sally"], FacultyReview{Year: "2023", Semester: "Fall", Review: "First", Rereview: "Yes", FacultyName: "Clint Sleeper", PrivateComment: "Clint's private comment", PublicComment: "Clint's public comment", OverallRating: "Satifactory"})
-	studentMap["sally"] = append(studentMap["sally"], FacultyReview{Year: "2023", Semester: "Fall", Review: "First", Rereview: "Yes", FacultyName: "Keith Roberson", PrivateComment: "Keith's private comment", PublicComment: "Keith's public comment", OverallRating: "Unsatisfactory"})
+
+	for i := 3; i < len(csv); i++ {
+		studentMap[csv[i][cols["studentname"]]] = append(studentMap[csv[i][cols["studentname"]]],
+			FacultyReview{
+				FacultyName:    csv[i][cols["facultyname"]],
+				PrivateComment: csv[i][cols["privatecomments"]],
+				PublicComment:  csv[i][cols["studentcomments"]],
+				OverallRating:  csv[i][cols["overallevaluation"]],
+			})
+	}
+
+	// data := struct {
+	//     Year string
+	//     Semester string
+	// 	Review string
+	// 	Rereview string
+	//     Rows   []FacultyReview
+	// }{
+	//     fields[],
+	//     table,
+	//     studentMap["jerry"],
+	// }
 
 	// data := map[string]map[string]string{}
 	// data["questions"] = make(map[string]string)
@@ -145,6 +154,6 @@ func director(cmd *cobra.Command, args []string) {
 		log.Fatalln(err)
 	}
 
-	template.Execute(os.Stdout, studentMap["jerry"])
+	template.Execute(os.Stdout, studentMap["Rich Bott"])
 
 }

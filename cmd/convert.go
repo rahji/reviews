@@ -54,7 +54,7 @@ func converter(cmd *cobra.Command, args []string) {
 	for i := 0; i < len(csv[0]); i++ {
 		reg := regexp.MustCompile(`^.*?\? - (.*)`)
 		res := reg.ReplaceAllString(csv[1][i], "${1}") // hack to remove redundant question group text
-		fields = append(fields, Field{ColumnName: csv[0][i], ColumnQuestion: res})
+		fields = append(fields, Field{ColumnNumber: i, ColumnName: csv[0][i], ColumnQuestion: res})
 	}
 
 	// loop through rest of the csv lines,

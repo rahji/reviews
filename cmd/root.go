@@ -22,6 +22,7 @@ var outputDir string
 // and a string for the column text (eg: the full text of the question)
 
 type Field struct {
+	ColumnNumber   int
 	ColumnName     string
 	ColumnQuestion string
 }
