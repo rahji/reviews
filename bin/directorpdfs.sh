@@ -1,12 +1,28 @@
 #!/bin/sh
 
-echo "We're about to extract director-only (private) comments from a Qualtrics csv file..."
+# use -v option to show full commands being run
+
+VERBOSE='false'
+while getopts ':v' 'OPTKEY'; do
+    case ${OPTKEY} in
+        'v')
+            VERBOSE='true'
+            ;;
+    esac
+done
+if $VERBOSE; then
+    echo "Running in VERBOSE mode!"
+    echo
+fi
+
+
+echo "We're about to extract comments (including those meant for the grad Director) from a Qualtrics CSV file..."
 echo ""
 
-echo "Choose the csv file you want to convert to PDFs"
+echo "Choose the CSV file you want to convert to PDFs"
 CSV=$(gum file .)
 
-echo "Choose the markdown template for this director-only (private) comments"
+echo "Choose the markdown template for creating grad director PDFs"
 TEMPLATE=$(gum file .)
 
 echo "Choose the folder where you want to save the markdown files"
@@ -16,7 +32,7 @@ echo "Choose the folder where you want to save the PDFs"
 PDFOUTPUT=$(gum file --directory .)
 
 echo "Enter a simple prefix for the markdown and PDF filenames"
-PREFIX=$(gum input --placeholder "eg: private, secret, director, etc.")
+PREFIX=$(gum input --placeholder "eg: comments, director, etc.")
 
 echo "Ready to create markdown files in $MDOUTPUT?"
 CHOICE=$(gum choose "YES" "NO")
@@ -25,7 +41,12 @@ if [ "$CHOICE" != "YES" ]; then
     exit 1
 fi
 
-gum spin --title "Converting to markdown" -- reviews director --template=$TEMPLATE --input=$CSV --outputdir=$MDOUTPUT --outputprefix=$PREFIX
+CMD_REVIEWS="reviews director --template=$TEMPLATE --input=$CSV --outputdir=$MDOUTPUT --outputprefix=$PREFIX"
+if $VERBOSE; then
+    echo "About to run: ($CMD_REVIEWS)"
+fi
+
+gum spin --title "Converting to markdown" -- $CMD_REVIEWS
 
 echo "Ready to create PDF files in $PDFOUTPUT? (this is the slow part)"
 CHOICE=$(gum choose "YES" "NO")
@@ -43,8 +64,13 @@ do
     # make short filenames for the spinner display
     SHORTMDNAME=`basename $MDFILE`
     SHORTPDFNAME=`basename $PDFNAME`
-    MESSAGE=$(printf "Converting %s to %s" $SHORTMDNAME $SHORTPDFNAME)
-    gum spin --title "$MESSAGE" -- pandoc $MDFILE -o $PDFNAME -V geometry:landscape --from markdown --template eisvogel
+    CMD_PANDOC="pandoc $MDFILE -o $PDFNAME -V geometry:landscape --from markdown --template eisvogel"
+    if $VERBOSE; then
+        echo "Running: ($CMD_PANDOC)"
+        $CMD_PANDOC
+    else
+        gum spin --title "$(printf "Converting %s to %s" $SHORTMDNAME $SHORTPDFNAME)" -- $CMD_PANDOC
+    fi
 done
 
 echo "Done!"
