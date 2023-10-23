@@ -72,14 +72,14 @@ func director(cmd *cobra.Command, args []string) {
 	studentMap := make(map[string][]FacultyReview)
 
 	for i := 3; i < len(csv); i++ {
-		studentMap[csv[i][cols["studentname"]]] = append(studentMap[csv[i][cols["studentname"]]],
+		studentMap[csv[i][cols["Student"]]] = append(studentMap[csv[i][cols["Student"]]],
 			FacultyReview{
 				Semester:       csv[i][cols["Semester"]],
 				Year:           csv[i][cols["Year"]],
 				Rereview:       csv[i][cols["rereview"]],
 				Review:         csv[i][cols["Review"]],
-				StudentName:    csv[i][cols["studentname"]],
-				FacultyName:    csv[i][cols["facultyname"]],
+				StudentName:    csv[i][cols["Student"]],
+				FacultyName:    csv[i][cols["Faculty"]],
 				PrivateComment: csv[i][cols["privatecomments"]],
 				PublicComment:  csv[i][cols["studentcomments"]],
 				OverallRating:  csv[i][cols["overallevaluation"]],
