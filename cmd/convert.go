@@ -68,8 +68,8 @@ func converter(cmd *cobra.Command, args []string) {
 			rereview = "_REREVIEW"
 		}
 		nameswapreg := regexp.MustCompile(`^(\p{L}).*?(\p{L}+)$`)
-		studentname := nameswapreg.ReplaceAllString(data["answers"]["studentname"], "${2}${1}") // "Rob Duarte" => "DuarteR"
-		facultyname := nameswapreg.ReplaceAllString(data["answers"]["facultyname"], "${2}${1}") // "Rob Duarte" => "DuarteR"
+		studentname := nameswapreg.ReplaceAllString(data["answers"]["Student"], "${2}${1}") // "Rob Duarte" => "DuarteR"
+		facultyname := nameswapreg.ReplaceAllString(data["answers"]["Faculty"], "${2}${1}") // "Rob Duarte" => "DuarteR"
 
 		fn_str := fmt.Sprintf("%s%s_%s%s_%s_%s.md",
 			data["answers"]["Year"],
