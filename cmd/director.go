@@ -21,8 +21,8 @@ type FacultyReview struct {
 	Year           string
 	Review         string
 	Rereview       string
-	StudentName    string
-	FacultyName    string
+	Student        string
+	Faculty        string
 	PrivateComment string
 	PublicComment  string
 	OverallRating  string
@@ -78,8 +78,8 @@ func director(cmd *cobra.Command, args []string) {
 				Year:           csv[i][cols["Year"]],
 				Rereview:       csv[i][cols["rereview"]],
 				Review:         csv[i][cols["Review"]],
-				StudentName:    csv[i][cols["Student"]],
-				FacultyName:    csv[i][cols["Faculty"]],
+				Student:        csv[i][cols["Student"]],
+				Faculty:        csv[i][cols["Faculty"]],
 				PrivateComment: csv[i][cols["privatecomments"]],
 				PublicComment:  csv[i][cols["studentcomments"]],
 				OverallRating:  csv[i][cols["overallevaluation"]],

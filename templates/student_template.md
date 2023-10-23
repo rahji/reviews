@@ -4,8 +4,8 @@ header-includes: \usepackage{longtable}\setlength{\LTleft}{0em}
 
 # {{.answers.Year}} {{.answers.Review}}-Year {{.answers.Semester}} Review Evaluation{{if eq .answers.rereview "Yes"}} (RE-REVIEW){{end}}
 
-Student Name: {{.answers.studentname}}  
-Faculty Name: {{.answers.facultyname}}  
+Student Name: {{.answers.Student}}  
+Faculty Name: {{.answers.Faculty}}  
 
 ## {{.answers.Review}}-Year Review Goals
 
@@ -69,6 +69,6 @@ Please see the “Formal Review Evaluation” section of the MFA Handbook to und
 
 ## Comments
 
-{{.questions.studentcomments}}
+*{{.questions.studentcomments}}*
 
-> {{.answers.studentcomments}}
+{{.answers.studentcomments}}
