@@ -1,5 +1,7 @@
 ---
-header-includes: \usepackage{longtable}\setlength{\LTleft}{0em}
+header-includes: 
+  - \usepackage{longtable}
+  - \setlength{\LTleft}{0em}
 ---
 
 # {{.answers.Year}} {{.answers.Review}}-Year {{.answers.Semester}} Review Evaluation{{if eq .answers.rereview "Yes"}} (RE-REVIEW){{end}}
