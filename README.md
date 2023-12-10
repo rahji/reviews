@@ -24,7 +24,7 @@ You'll need these things before you get started:
 * [go](https://go.dev/dl/)
 * texlive-full (`apt-get install texlive-full` on WSL/Ubuntu; you'd have to use a different package manager on MacOS)
 * [pandoc](https://pandoc.org)
-* [Eisvogel pandoc template](https://github.com/Wandmalfarbe/pandoc-latex-template/releases). Move the template file to your pandoc templates folder (see the Eisvogel instructions for more info).
+* [Eisvogel pandoc template](https://github.com/Wandmalfarbe/pandoc-latex-template/releases). (The template is also included in this repo, if you don't want to download it.) Move the template file to your pandoc templates folder (`~/.pandoc/templates/` on Linux).
 * [gum](https://github.com/charmbracelet/gum)
 
 To install the `reviews` project, run the following command from your terminal application:
@@ -33,9 +33,11 @@ To install the `reviews` project, run the following command from your terminal a
 go install github.com/rahji/reviews
 ```
 
+That installs the binary, but you'll also want to clone this repo so you have the templates, scripts, etc. (see below)
+
 ## Usage
 
-Once all of the surveys have been submitted and the CSV file has been exported from Qualtrics, run the command `bin/studentpdfs.sh` from the repository's root folder. You'll be asked for the following, by the script:
+Once all of the surveys have been submitted and the CSV file has been exported from Qualtrics, copy it to the repository's root folder. Change to that root folder and run the command `bin/studentpdfs.sh`. You'll be asked for the following, by the script:
 
 * The CSV file you want to convert to PDFs
 * The markdown template for creating student PDFs
