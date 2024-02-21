@@ -5,7 +5,7 @@ This project is only useful for the FSU Department of Art Graduate Director. It 
 1. Each faculty member submits their evaluations through a Qualtrics survey. They were previously sent invitation URLs: one for each student that they will review.
 2. The survey needs to be closed one week after the review has taken place.
 3. The results of all surveys are exported as a CSV file from the "Data & Analysis" tab in Qualtrics.
-4. The Grad Director runs the `reviews-docker` Docker container to produce PDFs for distribution to the students and a separate batch of PDFs containing comments directed to the Grad Director and Grad Advisor & Coordinator.
+4. The Grad Director runs the Docker command described below to produce PDFs for distribution to the students and a separate batch of PDFs containing comments directed to the Grad Director and Grad Advisor & Coordinator.
 
 ## Why
 
@@ -22,7 +22,7 @@ MacOS and Linux are already unix-like, so you're all set.
 Follow these steps to get read to run the Docker container. Even though we'll use Docker from the terminal, it makes the most sense to install Docker Desktop:
 
 1. [Install Docker Desktop](https://www.docker.com/products/docker-desktop/), while signing up for a free account.  If you're on Windows, you'll install Docker Desktop in Windows but [configure it to use WSL2](https://docs.docker.com/desktop/wsl/). To make sure it's working, try typing `docker version` at the terminal. You shouldn't get any errors.
-2. From the terminal, run `docker pull robduarte/reviews`
+2. From the terminal, run `docker pull robduarte/reviews:v1`
 
 ## Usage
 
@@ -31,10 +31,11 @@ Follow these steps to get read to run the Docker container. Even though we'll us
 2. Change to the new directory, then run the following Docker command:
 
 ```bash
-docker run -u $(id -u):$(id -g) -v .:/app/data reviews-docker /app/data/file_from_qualtrics.csv
+docker run -u $(id -u):$(id -g) -v .:/app/data robduarte/reviews:v1 /app/data/YOURFILE.CSV
 ```
+**Enter the command exactly as above, except for YOURFILE.CSV, which should be replaced with your CSV filename**
 
-(Note: the `-u` bit is required or your PDFs will all be owned by the `root` user, which is a pain when if you want to remove them later.)
+*(Note: the `-u` bit is required or your PDFs will all be owned by the `root` user, which is a pain when if you want to remove them later.)*
 
 The above Docker command will create a series of directories containing all the PDF files you need. It also creates a corresponding markdown file for each PDF. 
 
