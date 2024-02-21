@@ -1,9 +1,7 @@
 #!/bin/sh
 
-#REVIEWSDIR=/app/reviews
-#DATADIR=/app/data
-REVIEWSDIR=~/git/reviews
-DATADIR=~/git/reviews/data
+REVIEWSDIR=/app/reviews
+DATADIR=/app/data
 
 # Accept input file from local folder
 INPUT_FILE=$1
