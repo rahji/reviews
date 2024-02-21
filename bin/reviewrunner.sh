@@ -3,6 +3,9 @@
 REVIEWSDIR=/app/reviews
 DATADIR=/app/data
 
+mkdir -p $DATADIR/student/markdown $DATADIR/student/pdf 2>/dev/null
+mkdir -p $DATADIR/director/markdown $DATADIR/director/pdf 2>/dev/null
+
 # Accept input file from local folder
 INPUT_FILE=$1
 

@@ -19,8 +19,6 @@ RUN go install github.com/rahji/reviews@latest
 
 # clone reviews repo into /app and create data directories
 RUN git clone https://github.com/rahji/reviews.git
-RUN mkdir -p /app/data/student/markdown /app/data/student/pdf 
-RUN mkdir -p /app/data/director/markdown /app/data/director/pdf
 
 # Set the entrypoint for the container
 ENTRYPOINT ["/app/reviews/bin/reviewrunner.sh"]
