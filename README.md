@@ -15,20 +15,20 @@ Exporting PDFs in batch is a feature that Qualtrics does not have. It only lets 
 
 ## Installation
 
-You'll need these things before you get started:
+You'll need a unix-like operating system before you get started.
+On Windows, this means you'll need to install WSL2. You might as well install [Terminal](https://apps.microsoft.com/store/detail/windows-terminal/9N0DX20HK701) while you're at it.
+MacOS and Linux are already unix-like, so you're all set.
 
-* A unix-like operating system. 
-  * On Windows, this means you'll need to install WSL2. You might as well install [Terminal](https://apps.microsoft.com/store/detail/windows-terminal/9N0DX20HK701) while you're at it.
-  * MacOS and Linux are already unix-like, so you're all set.
-* [Install Docker Desktop](https://www.docker.com/products/docker-desktop/), while signing up for a free account. (If you're on Windows, you'll install Docker Desktop in Windows but [configure it to use WSL2](https://docs.docker.com/desktop/wsl/))
+Follow these steps to get read to run the Docker container. Even though we'll use Docker from the terminal, it makes the most sense to install Docker Desktop:
+
+1. [Install Docker Desktop](https://www.docker.com/products/docker-desktop/), while signing up for a free account.  If you're on Windows, you'll install Docker Desktop in Windows but [configure it to use WSL2](https://docs.docker.com/desktop/wsl/). To make sure it's working, try typing `docker version` at the terminal. You shouldn't get any errors.
+2. From the terminal, run `docker pull robduarte/reviews`
 
 ## Usage
 
-### Windows
-
-1. Make sure that Docker is [set up to use WSL2](https://docs.docker.com/desktop/wsl/) by trying the `docker` command while at a linux shell in the Terminal application.
-2. Make a new directory in linux and copy the CSV file from Qualtrics to that directory.
-3. Change to that directory, then run the following Docker command:
+1. Start the terminal application (make sure it's WSL if you're on Windows).
+2. Make a new directory and copy the CSV file from Qualtrics to that directory.
+2. Change to the new directory, then run the following Docker command:
 
 ```bash
 docker run -u $(id -u):$(id -g) -v .:/app/data reviews-docker /app/data/file_from_qualtrics.csv
@@ -36,13 +36,9 @@ docker run -u $(id -u):$(id -g) -v .:/app/data reviews-docker /app/data/file_fro
 
 (Note: the `-u` bit is required or your PDFs will all be owned by the `root` user, which is a pain when if you want to remove them later.)
 
-### MacOS or Linux
+The above Docker command will create a series of directories containing all the PDF files you need. It also creates a corresponding markdown file for each PDF. 
 
-Follow steps 2 and 3 from the Windows instructions above.
-
-### Output
-
-No matter which OS you're using, the Docker command will create a series of directories containing all the PDF files you need. After emailing the student PDFs to the individual grads, copy all of the folders into the appropriate folder on Sharepoint for our records.
+After emailing the student PDFs to the individual grads, copy all of the folders into the appropriate folder on Sharepoint for our records.
 
 ## Why this is on GitHub
 
