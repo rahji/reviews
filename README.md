@@ -39,7 +39,16 @@ docker run -u $(id -u):$(id -g) -v .:/app/data robduarte/reviews:v1 /app/data/YO
 
 The above Docker command will create a series of directories containing all the PDF files you need. It also creates a corresponding markdown file for each PDF. 
 
-After emailing the student PDFs to the individual grads, copy all of the folders into the appropriate folder on Sharepoint for our records.
+After emailing the student PDFs to the individual grads (and their committee chairs, in the case of 2nd and 3rd years), copy all of the folders into the appropriate folder on Sharepoint for our records.
+
+## Tips
+
+One reason having the markdown files is useful is that it makes finding text easy. Assuming you're using linux, you can easily 
+get a list of all students with "Provisional" ratings, by running the following command from the `student/markdown` folder:
+
+```bash
+grep -Hi "\*Provisional" *md
+```
 
 ## Why this is on GitHub
 
